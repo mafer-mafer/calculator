@@ -5,10 +5,10 @@ import { Calculator } from "./Calculator";
 const App = () => {
   return (
     <div className="App">
-      <header className="App-header">
-        <h2>Simple Calculator</h2>
-      </header>
-      <Calculator />
+      <div className="inner-div">
+        <h3>Simple Calculator</h3>
+        <Calculator />
+      </div>
     </div>
   );
 };

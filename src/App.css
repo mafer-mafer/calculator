@@ -1,60 +1,102 @@
 html,
 body {
-  height: 100%;
+  height: 100vh;
+  width: auto;
 }
 
 .App {
   text-align: center;
-  font-family: sans-serif;
+  font-family: "PT Sans Narrow", sans-serif;
   background-color: lavender;
-  height: 100%;
-  width: 100%;
+  height: 100vh;
+  width: auto;
+  margin: auto;
 }
 
-.App-header {
+.inner-div {
+  height: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
+  align-items: center;
+}
+
+h3 {
   font-size: calc(10px + 2vmin);
   color: black;
+  margin-bottom: 5px;
 }
 
-.App-link {
-  color: #61dafb;
-}
-
-.App button {
-  flex: 1 1 auto;
-  border-radius: 15px;
-  color: green;
-  padding: 5px;
-  font-size: calc(10px + 1vmin);
-}
-
-.App button:hover {
-  color: blue;
-}
-
-.calculator-container {
-  width: 25%;
+form {
+  width: 22%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin: auto;
-  margin-top: 20px;
-  padding: 10px;
   border: 3px solid #000000;
   box-shadow: -4px 4px #c0b4be;
   border-radius: 15px;
-  background-color: palevioletred;
+  background-color: #efa939;
+  margin-bottom: 200px;
 }
 
-#calculator-input-container {
-  background-color: plum;
+.calculator-input-container {
+  background-color: #5e5455;
+  width: 100%;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
 }
 
 form input {
+  width: 70%;
+  font-size: calc(8px + 1vmin);
+}
+
+.buttons-container {
+  padding: 10px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  width: 65%;
+}
+
+.buttons-row {
   width: 100%;
+  display: flex;
+  justify-content: left;
+  margin: auto;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  gap: 2px 3px;
+}
+
+form button {
+  flex: 1 1 auto;
+  border-radius: 15px;
+  background-color: #f19018;
+  color: white;
+  font-size: calc(10px + 1vmin);
+  font-weight: bold;
+  box-shadow: 0px 4px #5e5455;
+  border: 0px solid #000000;
+  margin: auto;
+}
+
+form button:hover {
+  background-color: #c0751a;
+}
+
+form button:active {
+  box-shadow: 0px 2px #5e5455;
+  transform: translateY(2px);
+  background-color: #c0751a;
+}
+
+#non-number {
+  background-color: #fceede;
+  color: #5e5455;
+}
+
+#non-number:hover {
+  background-color: #f1ca9b;
 }
