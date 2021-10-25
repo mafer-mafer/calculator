@@ -1,4 +1,5 @@
 import React from "react";
+import calc from "./Calculations";
 
 export class Calculator extends React.Component {
   constructor() {
@@ -12,13 +13,9 @@ export class Calculator extends React.Component {
   }
 
   onChange(e) {
-    let val = e.target.value;
-    let acceptable = "1234567890/+=-C*.()";
-    if (acceptable.includes(val[val.length - 1]) || val === "") {
-      this.setState({
-        expression: val,
-      });
-    }
+    this.setState({
+      expression: e.target.value,
+    });
   }
 
   onClick(e) {
@@ -31,8 +28,19 @@ export class Calculator extends React.Component {
     }
   }
 
-  onSubmit() {
-    //
+  onSubmit(e) {
+    e.preventDefault();
+    //If input has invalid characters, return Invalid
+    const regex = /[^0-9*\/()\-+.\s+]/g;
+    if (regex.test(this.state.expression)) {
+      this.setState({ expression: "Invalid Syntax" });
+    } else if (this.state.expression.length <= 1) {
+      this.setState({ expression: this.state.expression });
+    } else {
+      //Remove spaces from string
+      let cleanString = this.state.expression.replace(/\s+/g, "");
+      this.setState({ expression: calc(cleanString) });
+    }
   }
 
   render() {
@@ -49,6 +57,33 @@ export class Calculator extends React.Component {
           ></input>
         </div>
         <div className="buttons-container">
+          <div className="buttons-row">
+            <button id="non-number">&nbsp;</button>
+            <button
+              value="("
+              type="button"
+              onClick={this.onClick}
+              id="non-number"
+            >
+              (
+            </button>
+            <button
+              value=")"
+              type="button"
+              onClick={this.onClick}
+              id="non-number"
+            >
+              )
+            </button>
+            <button
+              value="C"
+              type="reset"
+              onClick={this.onClick}
+              id="non-number"
+            >
+              C
+            </button>
+          </div>
           <div className="buttons-row">
             <button value="7" type="button" onClick={this.onClick}>
               7
@@ -98,12 +133,12 @@ export class Calculator extends React.Component {
               3
             </button>
             <button
-              value="-"
+              value="."
               type="button"
               onClick={this.onClick}
               id="non-number"
             >
-              -
+              .
             </button>
           </div>
           <div className="buttons-row">
@@ -119,24 +154,17 @@ export class Calculator extends React.Component {
               +
             </button>
             <button
-              value="C"
-              type="reset"
-              onClick={this.onClick}
-              id="non-number"
-            >
-              C
-            </button>
-            <button
-              value=""
+              value="-"
               type="button"
               onClick={this.onClick}
               id="non-number"
             >
+              -
+            </button>
+            <button type="submit" id="non-number">
               =
             </button>
           </div>
-          {/* <button>(</button>
-      <button>)</button> */}
         </div>
       </form>
     );
