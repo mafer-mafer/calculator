@@ -1,5 +1,18 @@
 export default function calc(string) {
   let output;
+
+  //If input has invalid characters, return Invalid
+  const regex = /[^0-9*\/()\-+.\s+]/g;
+  if (regex.test(string)) {
+    return "Invalid Input";
+  }
+
+  if (string.length <= 1) {
+    return string;
+  }
+  //Remove spaces from string
+  string = string.replace(/\s+/g, "");
+
   let operators = {
     add: "+",
     sub: "-",
@@ -10,27 +23,57 @@ export default function calc(string) {
     left: "(",
     right: ")",
   };
-  //setting the order of operations
-  operators.order = [
-    [operators.mlt],
-    [operators.div],
-    [operators.add],
-    [operators.sub],
-  ];
+  let operatorStack = [];
+  let parenStack = [];
 
+  //Unsure if it's better to break this down into several specialized loops rather than just one
   for (let i = 0; i < string.length; i++) {
-    if (string[i] === "." && isNaN(string[i - 1])) {
+    let curr = string[i];
+
+    //Check for invalid operator syntax excluding first -
+    let isOp = "+-/*".includes(curr);
+    let theLength = operatorStack.length;
+    let isNeg = curr === "-";
+    if ((theLength === 1 && isOp && !isNeg) || (theLength === 2 && isOp)) {
+      return "Invalid Syntax";
+    } else if ((theLength === 1 && isNeg) || (theLength === 0 && isOp)) {
+      operatorStack.push(curr);
+    } else if (!isOp) {
+      while (operatorStack.length) {
+        operatorStack.pop();
+      }
+    }
+
+    //Use stack to check for parenthesis balance
+    if (curr === "(") {
+      parenStack.push(curr);
+    } else if (curr === ")" && parenStack.length > 0) {
+      parenStack.pop();
+    } else if (curr === ")" && !parenStack.length) {
+      return "Invalid Synatx";
+    }
+
+    //Add a 0 before decimal points
+    if (curr === "." && isNaN(string[i - 1])) {
       string = string.slice(0, i) + "0" + string.slice(i);
     }
   }
-  console.log(string);
+
+  //If we still have leftover parenthesis it is unbalanced
+  if (parenStack.length) {
+    return "Invalid Synatx";
+  }
+
   loopThrough(string);
 
   function loopThrough(string) {
-    let n = operators.order.length;
+    //setting the order of operations
+    operators.order = [
+      [[operators.mlt], [operators.div]],
+      [[operators.add], [operators.sub]],
+    ];
 
-    for (let i = 0; i < n; i++) {
-      // Checking for operators in between numbers or floats
+    for (let i = 0; i < operators.order.length; i++) {
       let re = new RegExp(
         "(\\d+\\.?\\d*)([\\" +
           operators.order[i].join("\\") +
@@ -41,7 +84,7 @@ export default function calc(string) {
       //  Loop while the specific operator is still existant in string
       while (re.test(string)) {
         output = calculate(RegExp.$1, RegExp.$2, RegExp.$3);
-        if (isNaN(output) || !isFinite(output)) return output; // exit early if not a number
+        if (isNaN(output) || !isFinite(output)) return output; // exit early if not a finite number
         string = string.replace(re, output); //replace num/operator/num with the output
       }
     }
@@ -59,7 +102,7 @@ export default function calc(string) {
       ? a / b
       : op === operators.mlt
       ? a * b
-      : "";
+      : "Error";
   }
   return output;
 }

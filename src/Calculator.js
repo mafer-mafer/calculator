@@ -30,17 +30,7 @@ export class Calculator extends React.Component {
 
   onSubmit(e) {
     e.preventDefault();
-    //If input has invalid characters, return Invalid
-    const regex = /[^0-9*\/()\-+.\s+]/g;
-    if (regex.test(this.state.expression)) {
-      this.setState({ expression: "Invalid Syntax" });
-    } else if (this.state.expression.length <= 1) {
-      this.setState({ expression: this.state.expression });
-    } else {
-      //Remove spaces from string
-      let cleanString = this.state.expression.replace(/\s+/g, "");
-      this.setState({ expression: calc(cleanString) });
-    }
+    this.setState({ expression: calc(this.state.expression) });
   }
 
   render() {
