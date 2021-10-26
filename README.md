@@ -36,3 +36,6 @@ You can alternatively run `npm test` to run tests, as well as `npm run build` to
 </ul>
 
 ## Example:
+
+<img width="450" alt="Calculator with Expression (1+(6/(2*1)))" src="./public/expression.png">
+<img width="450" alt="Calculator with Solved Expression (4)" src="./public/solved.png">

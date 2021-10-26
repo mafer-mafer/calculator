@@ -1,5 +1,4 @@
 export default function calc(string) {
-  console.log("start string is", string);
   let output;
 
   //If it has invalid characters, return Invalid Input
