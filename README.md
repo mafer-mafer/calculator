@@ -1,6 +1,6 @@
 # Simple Calculator
 
-This code will run a simple calculator that accepts mathemtical expressions as strings and returns the solution. It can receive the input either by keyboard or the UI buttons.
+This code will run a simple calculator that accepts mathematical expressions as strings and returns the solution. It can receive the input either by keyboard or the UI buttons.
 
 This calculator can handle:
 

@@ -13,14 +13,24 @@ export class Calculator extends React.Component {
   }
 
   onChange(e) {
+    //Update expression according to typed inputs
     this.setState({
       expression: e.target.value,
     });
   }
 
   onClick(e) {
+    //Clear if C button is clicked, Del last char if Del is clicked
+    //else add value to expression
     if (e.target.value === "C") {
       this.setState({ expression: "" });
+    } else if (e.target.value === "Del") {
+      this.setState({
+        expression: this.state.expression.slice(
+          0,
+          this.state.expression.length - 1
+        ),
+      });
     } else {
       this.setState({
         expression: this.state.expression + e.target.value,
@@ -48,7 +58,6 @@ export class Calculator extends React.Component {
         </div>
         <div className="buttons-container">
           <div className="buttons-row">
-            <button id="non-number">&nbsp;</button>
             <button
               value="("
               type="button"
@@ -65,6 +74,15 @@ export class Calculator extends React.Component {
             >
               )
             </button>
+            <button
+              value="Del"
+              type="button"
+              id="non-number"
+              onClick={this.onClick}
+            >
+              Del
+            </button>
+
             <button
               value="C"
               type="reset"
