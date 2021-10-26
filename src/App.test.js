@@ -1,6 +1,3 @@
-import { render, screen } from "@testing-library/react";
-import * as React from "react";
-import App from "./App";
 import calc from "./Calculations";
 
 // test("renders learn react link", () => {
@@ -95,7 +92,7 @@ test("Can handle parenthesis", () => {
 
 test("Can handle negative numbers", () => {
   expect(calc("-10+5")).toEqual(-5);
-  expect(calc("2*-10")).toEqual(20);
+  expect(calc("2*-10")).toEqual(-20);
 });
 
 test("Returns Invalid Syntax when given consecutive operators except for a second negative operator", () => {

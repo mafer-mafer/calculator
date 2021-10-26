@@ -1,27 +1,25 @@
 export default function calc(string) {
   let output;
 
-  //If input has invalid characters, return Invalid
+  //If it has invalid characters, return Invalid Input
   const regex = /[^0-9*\/()\-+.\s+]/g;
   if (regex.test(string)) {
     return "Invalid Input";
   }
 
+  //Remove spaces from string
+  string = string.replace(/\s+/g, "");
+
+  //unsure if needed
   if (string.length <= 1) {
     return string;
   }
-  //Remove spaces from string
-  string = string.replace(/\s+/g, "");
 
   let operators = {
     add: "+",
     sub: "-",
     div: "/",
     mlt: "*",
-  };
-  let parenthesis = {
-    left: "(",
-    right: ")",
   };
   let operatorStack = [];
   let parenStack = [];
@@ -50,7 +48,7 @@ export default function calc(string) {
     } else if (curr === ")" && parenStack.length > 0) {
       parenStack.pop();
     } else if (curr === ")" && !parenStack.length) {
-      return "Invalid Synatx";
+      return "Invalid Syntax";
     }
 
     //Add a 0 before decimal points
@@ -61,7 +59,7 @@ export default function calc(string) {
 
   //If we still have leftover parenthesis it is unbalanced
   if (parenStack.length) {
-    return "Invalid Synatx";
+    return "Invalid Syntax";
   }
 
   loopThrough(string);
@@ -75,23 +73,24 @@ export default function calc(string) {
 
     for (let i = 0; i < operators.order.length; i++) {
       let re = new RegExp(
-        "(\\d+\\.?\\d*)([\\" +
+        "(\\-?\\d+\\.?\\d*)([\\" +
           operators.order[i].join("\\") +
-          "])(\\d+\\.?\\d*)"
+          "])(\\-?\\d+\\.?\\d*)"
       );
       //resetting last index to begin search at index 0
       re.lastIndex = 0;
       //  Loop while the specific operator is still existant in string
       while (re.test(string)) {
         output = calculate(RegExp.$1, RegExp.$2, RegExp.$3);
-        if (isNaN(output) || !isFinite(output)) return output; // exit early if not a finite number
-        string = string.replace(re, output); //replace num/operator/num with the output
+        if (isNaN(output) || !isFinite(output)) return output; // exit early if not a finite or number
+        string = string.replace(re, output); //replace num+operator+num with the output
       }
     }
   }
 
   function calculate(a, op, b) {
     //ensuring there is a 0 before the decimals and convert to num
+    //unsure if still needed
     a = parseFloat(a);
     b = parseFloat(b);
     return op === operators.add
