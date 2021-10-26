@@ -1,10 +1,4 @@
-import calc from "./Calculations";
-
-// test("renders learn react link", () => {
-//   render(<App />);
-//   const linkElement = screen.getByText(/learn react/i);
-//   expect(linkElement).toBeInTheDocument();
-// });
+import calc from "./calcFunctions";
 
 test("Returns Invalid Input if given non digits, non operators, non spaces, non decimals", () => {
   expect(calc("5+hello-kitty")).toEqual("Invalid Input");

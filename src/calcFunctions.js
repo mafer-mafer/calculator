@@ -1,7 +1,5 @@
 export default function calc(string) {
-  let output;
-
-  //If it has invalid characters, return Invalid Input
+  //If string has invalid characters, return Invalid Input
   const regex = /[^0-9*\/()\-+.\s+]/g;
   if (regex.test(string)) {
     return "Invalid Input";
@@ -33,7 +31,7 @@ export default function calc(string) {
   for (let i = 0; i < string.length; i++) {
     let curr = string[i];
 
-    //Check for invalid operator syntax excluding first -
+    //Check for invalid operator syntax excluding second -
     let isOp = "+-/*".includes(curr);
     let theLength = operatorStack.length;
     let isNeg = curr === "-";
@@ -59,6 +57,7 @@ export default function calc(string) {
     //Add a 0 before decimal points
     if (curr === "." && isNaN(string[i - 1])) {
       string = string.slice(0, i) + "0" + string.slice(i);
+      i++;
     }
   }
 
@@ -68,7 +67,7 @@ export default function calc(string) {
   }
 
   let openIdx = [];
-  //Work on parenthesis first recursively
+  //Function to work on the inside of parenthesis recursively first
   function parenthesisResolver(string) {
     for (let i = 0; i < string.length; i++) {
       if (string[i] === "(") {
@@ -76,11 +75,12 @@ export default function calc(string) {
       } else if (string[i] === ")") {
         let openParenthIdx = openIdx.pop();
         let subString = string.slice(openParenthIdx + 1, i);
+        //Remove parenthesis while solving expression inside of parenthesis
         string =
           string.slice(0, openParenthIdx) +
           loopThrough(subString) +
           string.slice(i + 1);
-        i = 0;
+        i = openParenthIdx;
       }
     }
     return string;
@@ -89,6 +89,7 @@ export default function calc(string) {
   string = parenthesisResolver(string);
   return loopThrough(string);
 
+  //Function for actual math calculations
   function loopThrough(string) {
     //setting the order of operations
     operators.order = [
@@ -106,55 +107,28 @@ export default function calc(string) {
       re.lastIndex = 0;
       //  Loop while the specific operator is still existant in string
       while (re.test(string)) {
-        output = calculate(RegExp.$1, RegExp.$2, RegExp.$3);
-        if (isNaN(output) || !isFinite(output)) return output; // exit early if not a finite or number
-        string = string.replace(re, output); //replace num+operator+num with the output
+        let output = calculate(RegExp.$1, RegExp.$2, RegExp.$3);
+        if (isNaN(output) || !isFinite(output)) return output; // exit early if not finite or number
+        string = string.replace(re, output); //replace num+operator+num sequence with the output
       }
     }
     return string;
   }
 
   function calculate(a, op, b) {
-    let result;
-
-    //The following is needed to try to curve Javascript's difficulty with decimals/frames
-    let neededDecimalsPlaces = 0;
-
-    if (a.includes(".")) {
-      let idx = a.indexOf(".");
-      neededDecimalsPlaces = a.length - (idx + 1);
-    }
-
-    if (b.includes(".")) {
-      let idx = b.indexOf(".");
-      if (b.length - (idx + 1) > neededDecimalsPlaces) {
-        neededDecimalsPlaces = b.length - (idx + 1);
-      }
-    }
-
-    if (neededDecimalsPlaces > 0) {
-      a = a * (10 ^ neededDecimalsPlaces);
-      b = b * (10 ^ neededDecimalsPlaces);
-    }
-
     //ensuring there is a 0 before the decimals and convert to num
     a = parseFloat(a);
     b = parseFloat(b);
 
-    op === operators.add
-      ? (result = a + b)
+    //Finally solve the math operations
+    return op === operators.add
+      ? a + b
       : op === operators.sub
-      ? (result = a - b)
+      ? a - b
       : op === operators.div
-      ? (result = a / b)
+      ? a / b
       : op === operators.mlt
-      ? (result = a * b)
-      : (result = "Error");
-
-    if (neededDecimalsPlaces > 0) {
-      return result / (10 ^ neededDecimalsPlaces);
-    } else {
-      return result;
-    }
+      ? a * b
+      : "Error";
   }
 }

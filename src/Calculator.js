@@ -1,5 +1,5 @@
 import React from "react";
-import calc from "./Calculations";
+import calc from "./calcFunctions";
 
 export class Calculator extends React.Component {
   constructor() {
