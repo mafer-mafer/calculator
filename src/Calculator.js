@@ -44,7 +44,6 @@ export class Calculator extends React.Component {
   }
 
   render() {
-    console.log(this.state.expression);
     return (
       <form onSubmit={this.onSubmit}>
         <div className="calculator-input-container">

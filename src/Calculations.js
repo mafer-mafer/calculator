@@ -1,4 +1,5 @@
 export default function calc(string) {
+  console.log("start string is", string);
   let output;
 
   //If it has invalid characters, return Invalid Input
@@ -67,7 +68,27 @@ export default function calc(string) {
     return "Invalid Syntax";
   }
 
-  loopThrough(string);
+  let openIdx = [];
+  //Work on parenthesis first recursively
+  function parenthesisResolver(string) {
+    for (let i = 0; i < string.length; i++) {
+      if (string[i] === "(") {
+        openIdx.push(i);
+      } else if (string[i] === ")") {
+        let openParenthIdx = openIdx.pop();
+        let subString = string.slice(openParenthIdx + 1, i);
+        string =
+          string.slice(0, openParenthIdx) +
+          loopThrough(subString) +
+          string.slice(i + 1);
+        i = 0;
+      }
+    }
+    return string;
+  }
+
+  string = parenthesisResolver(string);
+  return loopThrough(string);
 
   function loopThrough(string) {
     //setting the order of operations
@@ -91,6 +112,7 @@ export default function calc(string) {
         string = string.replace(re, output); //replace num+operator+num with the output
       }
     }
+    return string;
   }
 
   function calculate(a, op, b) {
@@ -108,5 +130,4 @@ export default function calc(string) {
       ? a * b
       : "Error";
   }
-  return output;
 }
