@@ -23,6 +23,7 @@ export const Calculator = () => {
     }
   };
 
+  //Runs calculations for the expression on = or Enter, sets the return
   const onSubmit = (e) => {
     e.preventDefault();
     setExpression(calc(expression));

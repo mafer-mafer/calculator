@@ -28,8 +28,8 @@ export default function calc(string) {
   let parenStack = [];
 
   //I was previously running the following code in the same loop,
-  //But thought it might be cleaner to do it in separate loops, if less optimal
-  //Since I'm unsure as to how long the input string could really get
+  //nbt thought it might be cleaner to do it in separate loops, if less optimal...
+  //Especially since I'm unsure as to how long the input string could really get
 
   //Check for invalid operator syntax excluding second -
   for (let i = 0; i < string.length; i++) {
@@ -58,7 +58,7 @@ export default function calc(string) {
       return "Invalid Syntax";
     }
   }
-  //If we still have leftover parenthesis it is unbalanced
+  //If we still have leftover ( parenthesis it is unbalanced
   if (parenStack.length) {
     return "Invalid Syntax";
   }
