@@ -10,8 +10,13 @@ export default function calc(string) {
   //Remove spaces from string
   string = string.replace(/\s+/g, "");
 
-  //unsure if needed
-  if (string.length <= 1) {
+  //If no operators, return the same number back
+  if (
+    !string.includes("+") &&
+    !string.includes("-") &&
+    !string.includes("/") &&
+    !string.includes("*")
+  ) {
     return string;
   }
 
