@@ -115,18 +115,46 @@ export default function calc(string) {
   }
 
   function calculate(a, op, b) {
+    let result;
+
+    //The following is needed to try to curve Javascript's difficulty with decimals/frames
+    let neededDecimalsPlaces = 0;
+
+    if (a.includes(".")) {
+      let idx = a.indexOf(".");
+      neededDecimalsPlaces = a.length - (idx + 1);
+    }
+
+    if (b.includes(".")) {
+      let idx = b.indexOf(".");
+      if (b.length - (idx + 1) > neededDecimalsPlaces) {
+        neededDecimalsPlaces = b.length - (idx + 1);
+      }
+    }
+
+    if (neededDecimalsPlaces > 0) {
+      a = a * (10 ^ neededDecimalsPlaces);
+      b = b * (10 ^ neededDecimalsPlaces);
+    }
+
     //ensuring there is a 0 before the decimals and convert to num
-    //unsure if still needed
     a = parseFloat(a);
     b = parseFloat(b);
-    return op === operators.add
-      ? a + b
+
+    op === operators.add
+      ? (result = a + b)
       : op === operators.sub
-      ? a - b
+      ? (result = a - b)
       : op === operators.div
-      ? a / b
+      ? (result = a / b)
       : op === operators.mlt
-      ? a * b
-      : "Error";
+      ? (result = a * b)
+      : (result = "Error");
+
+    if (neededDecimalsPlaces > 0) {
+      return result / (10 ^ neededDecimalsPlaces);
+    } else {
+      return result;
+    }
   }
 }

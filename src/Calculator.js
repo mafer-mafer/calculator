@@ -140,12 +140,12 @@ export class Calculator extends React.Component {
               3
             </button>
             <button
-              value="."
+              value="-"
               type="button"
               onClick={this.onClick}
               id="non-number"
             >
-              .
+              -
             </button>
           </div>
           <div className="buttons-row">
@@ -161,12 +161,12 @@ export class Calculator extends React.Component {
               +
             </button>
             <button
-              value="-"
+              value="."
               type="button"
               onClick={this.onClick}
               id="non-number"
             >
-              -
+              .
             </button>
             <button type="submit" id="non-number">
               =
