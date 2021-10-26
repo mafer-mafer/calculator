@@ -1,20 +1,16 @@
-html,
-body {
-  height: 100vh;
-  width: auto;
-}
-
 .App {
   text-align: center;
   font-family: "PT Sans Narrow", sans-serif;
-  background-color: lavender;
+  background-color: #e6e6fa;
   height: 100vh;
   width: auto;
   margin: auto;
 }
 
-.inner-div {
+.App-inner-div {
   height: 100%;
+  width: 100%;
+  margin: 0px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -44,8 +40,8 @@ form {
   width: 100%;
   padding-top: 10px;
   padding-bottom: 10px;
-  border-top-left-radius: 15px;
-  border-top-right-radius: 15px;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
 }
 
 form input {

@@ -1,6 +1,6 @@
 export default function calc(string) {
   //If string has invalid characters, return Invalid Input
-  const regex = /[^0-9*\/()\-+.\s+]/g;
+  const regex = /[^0-9*/()\-+.\s+]/g;
   if (regex.test(string)) {
     return "Invalid Input";
   }
@@ -27,11 +27,13 @@ export default function calc(string) {
   let operatorStack = [];
   let parenStack = [];
 
-  //Unsure if it's better to break this down into several specialized loops rather than just one
+  //I was previously running the following code in the same loop,
+  //But thought it might be cleaner to do it in separate loops, if less optimal
+  //Since I'm unsure as to how long the input string could really get
+
+  //Check for invalid operator syntax excluding second -
   for (let i = 0; i < string.length; i++) {
     let curr = string[i];
-
-    //Check for invalid operator syntax excluding second -
     let isOp = "+-/*".includes(curr);
     let theLength = operatorStack.length;
     let isNeg = curr === "-";
@@ -44,30 +46,33 @@ export default function calc(string) {
         operatorStack.pop();
       }
     }
-
-    //Use stack to check for parenthesis balance
-    if (curr === "(") {
-      parenStack.push(curr);
-    } else if (curr === ")" && parenStack.length > 0) {
-      parenStack.pop();
-    } else if (curr === ")" && !parenStack.length) {
-      return "Invalid Syntax";
-    }
-
-    //Add a 0 before decimal points
-    if (curr === "." && isNaN(string[i - 1])) {
-      string = string.slice(0, i) + "0" + string.slice(i);
-      i++;
-    }
   }
 
+  //Use stack to check for parenthesis balance
+  for (let i = 0; i < string.length; i++) {
+    if (string[i] === "(") {
+      parenStack.push(string[i]);
+    } else if (string[i] === ")" && parenStack.length > 0) {
+      parenStack.pop();
+    } else if (string[i] === ")" && !parenStack.length) {
+      return "Invalid Syntax";
+    }
+  }
   //If we still have leftover parenthesis it is unbalanced
   if (parenStack.length) {
     return "Invalid Syntax";
   }
 
-  let openIdx = [];
+  //Add a 0 before decimal points
+  for (let i = 0; i < string.length; i++) {
+    if (string[i] === "." && isNaN(string[i - 1])) {
+      string = string.slice(0, i) + "0" + string.slice(i);
+      i++;
+    }
+  }
+
   //Function to work on the inside of parenthesis recursively first
+  let openIdx = [];
   function parenthesisResolver(string) {
     for (let i = 0; i < string.length; i++) {
       if (string[i] === "(") {
@@ -86,10 +91,7 @@ export default function calc(string) {
     return string;
   }
 
-  string = parenthesisResolver(string);
-  return loopThrough(string);
-
-  //Function for actual math calculations
+  //Function for dealing with order of operations and beaking down expression
   function loopThrough(string) {
     //setting the order of operations
     operators.order = [
@@ -98,6 +100,7 @@ export default function calc(string) {
     ];
 
     for (let i = 0; i < operators.order.length; i++) {
+      //RegExp for finding the sequence of (-)number(.)(number) -> operator -> (-)number(.)(number)
       let re = new RegExp(
         "(\\-?\\d+\\.?\\d*)([\\" +
           operators.order[i].join("\\") +
@@ -107,6 +110,7 @@ export default function calc(string) {
       re.lastIndex = 0;
       //  Loop while the specific operator is still existant in string
       while (re.test(string)) {
+        //Do the math for the sequence of number/op/number and assign the value to output
         let output = calculate(RegExp.$1, RegExp.$2, RegExp.$3);
         if (isNaN(output) || !isFinite(output)) return output; // exit early if not finite or number
         string = string.replace(re, output); //replace num+operator+num sequence with the output
@@ -115,12 +119,12 @@ export default function calc(string) {
     return string;
   }
 
+  //Function for actually doing math operations
   function calculate(a, op, b) {
     //ensuring there is a 0 before the decimals and convert to num
     a = parseFloat(a);
     b = parseFloat(b);
 
-    //Finally solve the math operations
     return op === operators.add
       ? a + b
       : op === operators.sub
@@ -131,4 +135,8 @@ export default function calc(string) {
       ? a * b
       : "Error";
   }
+
+  //Actually invoke the functions
+  string = parenthesisResolver(string);
+  return loopThrough(string);
 }
