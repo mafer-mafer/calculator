@@ -1,6 +1,6 @@
 # Simple Calculator
 
-This code will run a simple calculator that accepts expressions as strings and returns the solution.
+This code will run a simple calculator that accepts mathemtical expressions as strings and returns the solution. It can receive the input either by keyboard or the UI buttons.
 
 This calculator can handle:
 
@@ -16,7 +16,7 @@ This calculator can handle:
     <li>Spaces</li>
 </ul>
 
-## To begin:
+## To Begin:
 
 Clone this repository with `git clone`\
 Run `npm install`\
